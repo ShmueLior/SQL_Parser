@@ -10,7 +10,7 @@
 
 SqlParser::SqlParser(string i_SchemeName)
 {
-	m_Tables = GetTablesFromSchemeFile(i_SchemeName);
+	FillTablesFromSchemeFile(i_SchemeName);
 }
 
 string SqlParser::Parse(string i_Query)
@@ -104,10 +104,11 @@ bool SqlParser::IsExistAttribute(string i_Attribute)
 	string attributeName = i_Attribute.substr(tableName.length() + 1);
 	bool isExistAttribute = false;
 
-	Table* table = GetTable(tableName);
-	if (table != NULL)
+	
+	if (IsExistTable(tableName))
 	{
-		isExistAttribute = table->IsExistAttribute(attributeName);
+		
+		isExistAttribute = GetTable(tableName)->IsExistAttribute(attributeName);
 	}
 	return isExistAttribute;
 }
@@ -148,15 +149,7 @@ bool SqlParser::IsValidTableList(string i_TableList)
 
 bool SqlParser::IsExistTable(string i_Table)
 {
-	bool isExist = false;
-	for (Table* table : m_Tables)
-	{
-		if (table->GetName()._Equal(i_Table))
-		{
-			isExist = true;
-		}
-	}
-	return isExist;
+	return m_tablesMap.find(i_Table) != m_tablesMap.end();
 }
 
 //WHERE
@@ -393,16 +386,7 @@ bool SqlParser::IsDigit(string i_Constant)
 //UTILS
 Table* SqlParser::GetTable(string i_TableName)
 {
-	Table* tableRes = NULL;
-	for (Table* table : m_Tables)
-	{
-		if (table->GetName()._Equal(i_TableName))
-		{
-			tableRes = table;
-		}
-	}
-
-	return tableRes;
+	return m_tablesMap[i_TableName];
 }
 
 string* SqlParser::SplitQuery(string i_Query)
@@ -463,9 +447,8 @@ string SqlParser::getElements(string sqlString)
 	return sqlString.substr(i);
 }
 
-list<Table*> SqlParser::GetTablesFromSchemeFile(string i_FileName)
+void SqlParser::FillTablesFromSchemeFile(string i_FileName)
 {
-	list <Table*> tables;
 	ifstream fileStreamReader(i_FileName);
 	if (fileStreamReader.is_open())
 	{
@@ -473,7 +456,7 @@ list<Table*> SqlParser::GetTablesFromSchemeFile(string i_FileName)
 		while (getline(fileStreamReader, line))
 		{											 //read data from file object and put it into string.
 			//cout << line << "\n"; //print the data of the string
-			tables.push_back(new Table(line));
+			m_tablesMap.insert(pair<string, Table*>(line.substr(0, line.find('(')),new Table(line)));
 		}
 		fileStreamReader.close();
 	}
@@ -481,11 +464,9 @@ list<Table*> SqlParser::GetTablesFromSchemeFile(string i_FileName)
 	{
 		cout << "Unable to open file";
 	};
-
-	return tables;
 }
 
 bool SqlParser::IsDataBaseExist()
 {
-	return m_Tables.size() != 0;
+	return m_tablesMap.size() != 0;
 }
