@@ -5,12 +5,15 @@
 #include <stack>
 #include <iostream>
 #include <cctype>
+#include <map>
 #pragma once
 
 using namespace std;
 class SqlParser {       // The class
 private:
-	list <Table*> m_Tables;
+
+	map <string, Table*> m_tablesMap;
+	
 	
 	
 	bool IsValidAttributeList(string i_SelectString);
@@ -23,7 +26,7 @@ private:
 	string trimWhiteSpaces(string sqlString);
 	string getElements(string sqlString);
 	list<Table*> GetTablesFromSchemeFile(string i_FileName);
-	//list <Table*> GetTablesFromSchemeFile();
+	void FillTablesFromSchemeFile(string i_FileName);
 	string IsValidSelected(string i_SelectString);
 	bool IsValidTableList(string i_TableList);
 	bool IsExistTable(string i_Table);

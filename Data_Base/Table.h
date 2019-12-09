@@ -2,12 +2,14 @@
 
 #include<string>
 #include "Attribute.h"
+#include <map>
 using namespace std;
 class Table {       // The class
 private:
 	string m_Name;
-	Attribute** m_Attributes;
-	int m_NumOfAttributes;
+	map <string, Attribute> m_AttributesMap;
+	//Attribute** m_Attributes;
+	//int m_NumOfAttributes;
 	
 	
 	void parseLine(string i_Line);
