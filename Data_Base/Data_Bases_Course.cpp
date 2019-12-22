@@ -1,12 +1,14 @@
 // Data_Bases_Course.cpp : This file contains the 'main' function. Program execution begins and ends there.
-
+/*
 #include "SqlParser.h"
 #include <map>
+#include "Data_Bases_Course.h"
 using namespace std;
 
 int main()
 {
-	
+//	SqlCondition sqlCondition = SqlCondition("(Customers.CustomerName=Orders.CustomerName) AND Orders.Price>1000");
+
 	SqlParser sqlParser = SqlParser("scheme.txt");
 
 	if (sqlParser.IsDataBaseExist())
@@ -27,6 +29,7 @@ int main()
 		}
 	}
 
-
+	
 	return 0;
 }
+*/

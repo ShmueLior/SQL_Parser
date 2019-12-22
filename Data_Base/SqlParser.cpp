@@ -1,18 +1,14 @@
-#define  _CRT_SECURE_NO_WARNINGS
-
-#define SELECT 6
-#define FROM 4
-#define WHERE 5
-#define DISTINCT 8
-#define DATA_BASE "scheme.txt" 
-
 #include "SqlParser.h"
-
 SqlParser::SqlParser(string i_SchemeName)
 {
 	FillTablesFromSchemeFile(i_SchemeName);
 }
-
+/*
+SqlParser::SqlParser(string i_SchemeName)
+{
+	FillTablesFromSchemeFile(i_SchemeName);
+}
+*/
 string SqlParser::Parse(string i_Query)
 {
 	string* arr = SplitQuery(i_Query);
@@ -40,8 +36,8 @@ string SqlParser::IsValidSelected(string i_SelectString) //Select           x,  
 {
 	bool isValidSelected = true;
 	string isValidSelectedUI;
-
-	string attributeList = getElements(i_SelectString);
+	
+	string attributeList = SQLUtils::getElements(i_SelectString);
 
 	bool isDistinct = IsDistinct(attributeList);
 
@@ -50,7 +46,7 @@ string SqlParser::IsValidSelected(string i_SelectString) //Select           x,  
 		attributeList = attributeList.substr(DISTINCT + 1);
 	}
 
-	attributeList = trimWhiteSpaces(attributeList);
+	attributeList = StringUtils::TrimWhiteSpaces(attributeList);
 
 	bool isAllSelected = attributeList._Equal("*");
 
@@ -84,7 +80,7 @@ bool SqlParser::IsValidAttributeList(string i_AttributeList)
 
 	string delimiter = ",";
 	string attribute = i_AttributeList.substr(0, i_AttributeList.find(delimiter));
-	bool isExistAttribute = IsExistAttribute(attribute); 
+	bool isExistAttribute = IsExistAttribute(attribute);
 
 	if (attribute.size() + 1 < i_AttributeList.size())
 	{
@@ -104,10 +100,10 @@ bool SqlParser::IsExistAttribute(string i_Attribute)
 	string attributeName = i_Attribute.substr(tableName.length() + 1);
 	bool isExistAttribute = false;
 
-	
+
 	if (IsExistTable(tableName))
 	{
-		
+
 		isExistAttribute = GetTable(tableName)->IsExistAttribute(attributeName);
 	}
 	return isExistAttribute;
@@ -117,8 +113,8 @@ bool SqlParser::IsExistAttribute(string i_Attribute)
 string SqlParser::IsValidFrom(string i_FromString)
 {
 	string isValidFrom = "succes";
-	string tableList = getElements(i_FromString);
-	tableList = trimWhiteSpaces(tableList);
+	string tableList = SQLUtils::getElements(i_FromString);
+	tableList = StringUtils::TrimWhiteSpaces(tableList);
 	if (!IsValidTableList(tableList))
 	{
 		isValidFrom = tableList;
@@ -393,14 +389,14 @@ string* SqlParser::SplitQuery(string i_Query)
 {
 	string* arr = new string[3];
 	arr[0] = i_Query.substr(i_Query.find("SELECT"), i_Query.find("FROM") - i_Query.find("SELECT"));
-	arr[0] = RemoveBackSpaceFromEnd(arr[0]);
+	arr[0] = StringUtils::RemoveBackSpaceFromEnd(arr[0]);
 	arr[1] = i_Query.substr(i_Query.find("FROM"), i_Query.find("WHERE") - i_Query.find("FROM"));
-	arr[1] = RemoveBackSpaceFromEnd(arr[1]);
+	arr[1] = StringUtils::RemoveBackSpaceFromEnd(arr[1]);
 	arr[2] = i_Query.substr(i_Query.find("WHERE"), i_Query.length() - i_Query.find("WHERE") - 1);
-	arr[2] = RemoveBackSpaceFromEnd(arr[2]);
+	arr[2] = StringUtils::RemoveBackSpaceFromEnd(arr[2]);
 	return arr;
 }
-
+/*
 string SqlParser::RemoveBackSpaceFromEnd(string i_Str)
 {
 	int i = i_Str.length() - 1;
@@ -410,7 +406,8 @@ string SqlParser::RemoveBackSpaceFromEnd(string i_Str)
 	}
 	return i_Str.substr(0, i + 1);
 }
-
+*/
+/*
 string SqlParser::trimWhiteSpaces(string sqlString)
 {
 	int i = 0;
@@ -429,7 +426,8 @@ string SqlParser::trimWhiteSpaces(string sqlString)
 
 	return sqlString;
 }
-
+*/
+/*
 string SqlParser::getElements(string sqlString)
 {
 	int i = 0;
@@ -446,7 +444,7 @@ string SqlParser::getElements(string sqlString)
 
 	return sqlString.substr(i);
 }
-
+*/
 void SqlParser::FillTablesFromSchemeFile(string i_FileName)
 {
 	ifstream fileStreamReader(i_FileName);
@@ -456,7 +454,7 @@ void SqlParser::FillTablesFromSchemeFile(string i_FileName)
 		while (getline(fileStreamReader, line))
 		{											 //read data from file object and put it into string.
 			//cout << line << "\n"; //print the data of the string
-			m_tablesMap.insert(pair<string, Table*>(line.substr(0, line.find('(')),new Table(line)));
+			m_tablesMap.insert(pair<string, Table*>(line.substr(0, line.find('(')), new Table(line)));
 		}
 		fileStreamReader.close();
 	}

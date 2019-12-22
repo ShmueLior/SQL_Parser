@@ -1,9 +1,7 @@
-#pragma once
-
-#include<string>
 #include "Attribute.h"
+#include "StringUtils.h"
 #include <map>
-using namespace std;
+
 class Table {       // The class
 private:
 	string m_Name;

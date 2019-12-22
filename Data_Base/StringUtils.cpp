@@ -1,6 +1,6 @@
 #include "StringUtils.h"
 
-string StringUtils::Trim(string i_Str)
+string StringUtils::TrimWhiteSpaces(string i_Str)
 {
 	int i = 0;
 	int count = 0;
@@ -17,4 +17,15 @@ string StringUtils::Trim(string i_Str)
 	i_Str = i_Str.substr(0, i_Str.find('\0'));
 
 	return i_Str;
+}
+
+
+string StringUtils::RemoveBackSpaceFromEnd(string i_Str)
+{
+	int i = i_Str.length() - 1;
+	while (i_Str[i] == ' ')
+	{
+		i--;
+	}
+	return i_Str.substr(0, i + 1);
 }

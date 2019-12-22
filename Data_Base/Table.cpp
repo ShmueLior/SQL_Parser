@@ -1,6 +1,5 @@
 #include "Table.h"
 #include <iostream>
-#include "StringUtils.h"
 
 void Table::parseLine(string i_Line)
 {
@@ -17,7 +16,7 @@ void Table::fillAttributes(string i_AttributeList)
 {
 	// CustomerName:STRING, Age:INTEGER)
 	int i = 0;
-	i_AttributeList = StringUtils::Trim(i_AttributeList);
+	i_AttributeList = StringUtils::TrimWhiteSpaces(i_AttributeList);
 
 	bool finished = false;
 	while (!finished)
